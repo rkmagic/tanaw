@@ -1,120 +1,78 @@
-# Tanaw (Bridging Talent)
+# Tanaw
 
-A recruitment platform connecting Filipino job seekers with opportunities across Europe. Live product: [tanaw.co](https://tanaw.co).
+**Acting CTO · product and platform**
 
-This repository is a source-available snapshot of the app for portfolio review. It is not an invitation to redeploy the production service.
+[tanaw.co](https://tanaw.co) is a hiring platform for blue-collar workers moving from the Philippines into European roles. I led product and engineering as acting CTO: what we build, in what order, and how the system holds together.
 
-## Tech Stack
+This repo is a source-available snapshot for portfolio review. It is not a license to redeploy the production service.
 
-- **Frontend**: React + TypeScript + Vite
-- **UI**: shadcn-ui + Tailwind CSS
-- **Backend**: Node.js + Express (Cloud Run)
-- **Database**: PostgreSQL (Cloud SQL)
-- **Authentication**: Firebase Authentication
-- **Storage**: Google Cloud Storage
-- **Deployment**: Google Cloud Platform
+## The problem
 
-## Getting Started
+International hiring for skilled trades and service work is still a paper process. Workers struggle to:
 
-### Prerequisites
+- **Get documents right** — IDs, resumes, medicals, and certificates in the form agencies and employers actually accept
+- **Find the right role** — openings exist, but matching is informal and workers cannot see what they qualify for
+- **Move through immigration** — visa and compliance steps sit outside the hiring flow, so candidates stall after they are “selected”
 
-- Node.js 20+ and npm
-- Google Cloud Platform account
-- Firebase project
+Agencies and employers inherit that mess: incomplete files, unclear status, and weeks of back-and-forth before anyone can start.
 
-### Frontend Setup
+## What we are building
 
-1. Install dependencies:
+Tanaw is the operating system for that journey — one place for the worker, the agency, and the employer.
+
+| For workers | For agencies and employers |
+| --- | --- |
+| Conversational intake instead of a 20-field form | Shared candidate profiles with document status |
+| Guided document collection (ID, resume, medical, credentials) | Role-based dashboards to review and verify files |
+| Bilingual English / Tagalog so the product is usable, not just translated | Employer and admin views for pipeline and compliance |
+
+The product thesis: if document readiness, role fit, and immigration steps live in one workflow, time-to-hire drops and fewer candidates fall out of the process.
+
+## Product surfaces
+
+- **Marketing site** — positioning for workers and European employers
+- **Job-seeker chat onboarding** — collect work history and intent through a conversation, then create an account
+- **Candidate dashboard** — profile and document submission with agency follow-up
+- **Agency / employer / admin dashboards** — review candidates, documents, and roles
+- **Public profile** — shareable candidate view
+
+## How I approached it as acting CTO
+
+- **Start from the worker constraint.** Forms fail this audience. Intake is a chat; language is English and Tagalog from day one.
+- **Treat documents as the product.** Uploads, verification status, and agency review are first-class — not an afterthought on a profile page.
+- **Separate concerns for production.** Firebase Auth for identity, PostgreSQL for profiles and roles, Cloud Storage for sensitive files, Cloud Run for the API. Secrets stay in env / Secret Manager, not in the app.
+- **Ship a real multi-sided system.** Candidate, agency, employer, and admin are different products on the same data model, not one dashboard with a flag.
+
+## Stack
+
+| Layer | Choice |
+| --- | --- |
+| Frontend | React, TypeScript, Vite, Tailwind, shadcn/ui |
+| API | Node.js, Express, TypeScript |
+| Auth | Firebase Authentication + Admin SDK |
+| Data | PostgreSQL on Cloud SQL |
+| Files | Google Cloud Storage |
+| Hosting | Firebase Hosting (web), Cloud Run (API) |
+
+## Local setup
+
+**Frontend** — Node.js 20+, then:
+
 ```bash
 npm install
 ```
 
-2. Create a `.env` file in the root directory:
-```
-VITE_FIREBASE_API_KEY=your-firebase-api-key
-VITE_FIREBASE_AUTH_DOMAIN=your-project.firebaseapp.com
-VITE_FIREBASE_PROJECT_ID=your-project-id
-VITE_API_URL=http://localhost:8080
-```
+Copy `.env.example` to `.env` and set Firebase plus `VITE_API_URL` (default `http://localhost:8080`). Then `npm run dev`.
 
-3. Start the development server:
-```bash
-npm run dev
-```
+**Backend** — from `backend/`:
 
-### Backend Setup
-
-1. Navigate to the backend directory:
-```bash
-cd backend
-```
-
-2. Install dependencies:
 ```bash
 npm install
 ```
 
-3. Create a `.env` file in the `backend/` directory (see `backend/.env.example`)
+Copy `backend/.env.example` to `backend/.env`, point it at PostgreSQL, and run `backend/migrations/001_initial_schema.sql` (then `002_add_accounts_roles.sql`). Then `npm run dev`.
 
-4. Set up the database:
-   - Create a Cloud SQL PostgreSQL instance
-   - Run the migration: `backend/migrations/001_initial_schema.sql`
-
-5. Start the development server:
-```bash
-npm run dev
-```
-
-## Project Structure
-
-```
-├── backend/              # Backend API (Express + TypeScript)
-│   ├── src/
-│   │   ├── config/      # Database, Firebase, Storage config
-│   │   ├── controllers/ # Request handlers
-│   │   ├── middleware/  # Auth, error handling
-│   │   ├── routes/      # API routes
-│   │   └── utils/       # Utility functions
-│   ├── migrations/      # Database migrations
-│   └── Dockerfile       # Container configuration
-├── src/                 # Frontend React app
-│   ├── components/     # React components
-│   ├── contexts/        # React contexts (Auth, Language)
-│   ├── integrations/    # API clients (GCP)
-│   └── pages/           # Page components
-└── public/              # Static assets
-```
-
-## Deployment
-
-### Backend (Cloud Run)
-
-1. Build the Docker image:
-```bash
-cd backend
-docker build -t gcr.io/[PROJECT-ID]/bridging-talent-api .
-```
-
-2. Push to Google Container Registry:
-```bash
-docker push gcr.io/[PROJECT-ID]/bridging-talent-api
-```
-
-3. Deploy to Cloud Run:
-```bash
-gcloud run deploy bridging-talent-api \
-  --image gcr.io/[PROJECT-ID]/bridging-talent-api \
-  --platform managed \
-  --region us-central1
-```
-
-### Frontend
-
-Deploy to your preferred hosting service (Firebase Hosting, Vercel, etc.)
-
-## Environment Variables
-
-See `.env.example` files in both root and `backend/` directories for required environment variables.
+Full GCP walkthrough: [GCP_SETUP.md](GCP_SETUP.md). Environment variable lists live in the `.env.example` files.
 
 ## License
 
