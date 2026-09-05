@@ -1,0 +1,31 @@
+# Run migrations via Docker (Cloud SQL Proxy + migrate)
+# Usage:
+#   1. Add INSTANCE_CONNECTION_NAME to backend/.env (e.g. YOUR_PROJECT_ID:YOUR_REGION:YOUR_INSTANCE_ID)
+#      Find it: gcloud sql instances describe INSTANCE_NAME --format='value(connectionName)'
+#   2. Ensure gcloud is logged in: gcloud auth application-default login
+#   3. From project root: docker compose -f backend/docker-compose.migrate.yml --profile migrate up
+#
+# The proxy uses Application Default Credentials. On Windows, the credentials are in %APPDATA%\gcloud.
+# On Linux/Mac: ~/.config/gcloud
+
+services:
+  proxy:
+    image: gcr.io/cloud-sql-connectors/cloud-sql-proxy:2.8.0
+    command: ["--port=5432", "${INSTANCE_CONNECTION_NAME}"]
+    ports:
+      - "5432:5432"
+    volumes:
+      - ${APPDATA}/gcloud:/root/.config/gcloud:ro
+    profiles:
+      - migrate
+
+  migrate:
+    image: node:20-alpine
+    working_dir: /app
+    volumes:
+      - .:/app
+    env_file: .env
+    # Use direct DB_HOST from .env (no proxy). For proxy: set DB_HOST=proxy and unset INSTANCE_CONNECTION_NAME.
+    command: sh -c "npm ci && npx tsx src/migrate.ts"
+    profiles:
+      - migrate

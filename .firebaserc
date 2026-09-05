@@ -1,0 +1,19 @@
+{
+  "projects": {
+    "default": "tanaw-d92d2"
+  },
+  "targets": {
+    "tanaw-d92d2": {
+      "hosting": {
+        "prod": [
+          "REPLACE_WITH_PROD_SITE_ID",
+          "tanaw-d92d2"
+        ],
+        "staging": [
+          "bridging-talent-staging"
+        ]
+      }
+    }
+  },
+  "etags": {}
+}
