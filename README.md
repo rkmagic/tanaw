@@ -10,15 +10,15 @@ This repo is a source-available snapshot for portfolio review. It is not a licen
 
 International hiring for skilled trades and service work is still a paper process. Workers struggle to:
 
-- **Get documents right** — IDs, resumes, medicals, and certificates in the form agencies and employers actually accept
-- **Find the right role** — openings exist, but matching is informal and workers cannot see what they qualify for
-- **Move through immigration** — visa and compliance steps sit outside the hiring flow, so candidates stall after they are “selected”
+- **Get documents right.** IDs, resumes, medicals, and certificates in the form agencies and employers actually accept
+- **Find the right role.** Openings exist, but matching is informal and workers cannot see what they qualify for
+- **Move through immigration.** Visa and compliance steps sit outside the hiring flow, so candidates stall after they are "selected"
 
 Agencies and employers inherit that mess: incomplete files, unclear status, and weeks of back-and-forth before anyone can start.
 
 ## What we are building
 
-Tanaw is the operating system for that journey — one place for the worker, the agency, and the employer.
+Tanaw is the operating system for that journey: one place for the worker, the agency, and the employer.
 
 | For workers | For agencies and employers |
 | --- | --- |
@@ -30,16 +30,16 @@ The product thesis: if document readiness, role fit, and immigration steps live 
 
 ## Product surfaces
 
-- **Marketing site** — positioning for workers and European employers
-- **Job-seeker chat onboarding** — collect work history and intent through a conversation, then create an account
-- **Candidate dashboard** — profile and document submission with agency follow-up
-- **Agency / employer / admin dashboards** — review candidates, documents, and roles
-- **Public profile** — shareable candidate view
+- **Marketing site.** Positioning for workers and European employers
+- **Job-seeker chat onboarding.** Collect work history and intent through a conversation, then create an account
+- **Candidate dashboard.** Profile and document submission with agency follow-up
+- **Agency / employer / admin dashboards.** Review candidates, documents, and roles
+- **Public profile.** Shareable candidate view
 
 ## How I approached it as acting CTO
 
 - **Start from the worker constraint.** Forms fail this audience. Intake is a chat; language is English and Tagalog from day one.
-- **Treat documents as the product.** Uploads, verification status, and agency review are first-class — not an afterthought on a profile page.
+- **Treat documents as the product.** Uploads, verification status, and agency review are first-class, not an afterthought on a profile page.
 - **Separate concerns for production.** Firebase Auth for identity, PostgreSQL for profiles and roles, Cloud Storage for sensitive files, Cloud Run for the API. Secrets stay in env / Secret Manager, not in the app.
 - **Ship a real multi-sided system.** Candidate, agency, employer, and admin are different products on the same data model, not one dashboard with a flag.
 
@@ -56,7 +56,7 @@ The product thesis: if document readiness, role fit, and immigration steps live 
 
 ## Local setup
 
-**Frontend** — Node.js 20+, then:
+**Frontend.** Node.js 20+, then:
 
 ```bash
 npm install
@@ -64,7 +64,7 @@ npm install
 
 Copy `.env.example` to `.env` and set Firebase plus `VITE_API_URL` (default `http://localhost:8080`). Then `npm run dev`.
 
-**Backend** — from `backend/`:
+**Backend.** From `backend/`:
 
 ```bash
 npm install
